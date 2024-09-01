@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: This template is partially managed by Amazon.Lambda.Annotations (v1.3.0.0).
+Resources:
+  LtlyApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - "http://localhost:5173"
+        AllowHeaders:
+          - authorization
+          - content-type
+          - host
+        AllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        MaxAge: 600
+        AllowCredentials: true
+      DefaultRouteSettings:
+        DetailedMetricsEnabled: true
+      # Auth:
+      #   DefaultAuthorizer: LambdaAuthorizer
+      #   Authorizers:
+      #     LambdaAuthorizer:
+      #       FunctionArn: !Ref LambdaAuthorizerArn
+      #       AuthorizerPayloadFormatVersion: '2.0'
+      #       EnableSimpleResponses: true
+      #       Identity:
+      #         Headers:
+      #           - authorization  FullAccessRole:
+  DefaultLambdaRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      RoleName: FullAccess
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: Allow
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: 
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/CloudWatchFullAccessV2
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+  ShortenUrl:
+    Type: AWS::Serverless::Function
+    Metadata:
+      Tool: Amazon.Lambda.Annotations
+      SyncedEvents:
+        - RootGet
+    Properties:
+      FunctionName: ShortenUrl
+      Runtime: dotnet8
+      CodeUri: .
+      MemorySize: 3008
+      EphemeralStorage:
+        Size: 3008
+      Timeout: 30
+      Role: !GetAtt DefaultLambdaRole.Arn
+      PackageType: Zip
+      Handler: Ltly.Lambda::Ltly.Lambda.Functions.UrlShortenerFunctions_ShortenUrl_Generated::ShortenUrl
+      Events:
+        RootGet:
+          Type: HttpApi
+          Properties:
+            Path: /api/v1/shorten
+            Method: GET
+            ApiId: !Ref LtlyApi
+Outputs:
+  ApiURL:
+    Description: API endpoint URL for Prod environment
+    Value:
+      Fn::Sub: https://${LtlyApi}.execute-api.${AWS::Region}.amazonaws.com/
