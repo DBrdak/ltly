@@ -74,6 +74,12 @@ Resources:
             Path: /api/v1/shorten
             Method: GET
             ApiId: !Ref LtlyApi
+  AppS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ltly-default
+      VersioningConfiguration:
+        Status: Enabled
 Outputs:
   ApiURL:
     Description: API endpoint URL for Prod environment

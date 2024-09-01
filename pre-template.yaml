@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: This template is partially managed by Amazon.Lambda.Annotations (v1.3.0.0).
+
+Resources:
+  AppS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ltly-default
+      VersioningConfiguration:
+        Status: Enabled
+
+
+Outputs:
+  S3BucketName:
+    Description: Name of the S3 bucket
+    Value: !Ref AppS3Bucket
