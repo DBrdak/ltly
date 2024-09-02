@@ -9,6 +9,8 @@ public sealed class Url
     public string OriginalValue { get; init; }
     public string ShortenedValue { get; init; }
     private const int tokenLength = 4;
+    private const string httpsPrefix = "https://";
+    private const string httpPrefix = "http://";
 
     [JsonConstructor]
     [Newtonsoft.Json.JsonConstructor]
@@ -25,6 +27,11 @@ public sealed class Url
         if (isInvalidUrl)
         {
             return UrlErrors.InvalidUrlError;
+        }
+
+        if (!longUrl.StartsWith(httpPrefix) && !longUrl.StartsWith(httpsPrefix))
+        {
+            longUrl = string.Concat(httpsPrefix, longUrl);
         }
 
         var shortenedUrl = string.Concat(GlobalSettings.Domain, "/", GenerateToken());
