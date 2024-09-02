@@ -1,6 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2;
-using System.Transactions;
 
 namespace Ltly.Lambda.Data;
 

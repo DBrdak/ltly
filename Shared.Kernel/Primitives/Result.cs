@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-namespace Ltly.Lambda.Domain.Primitives;
+namespace Shared.Kernel.Primitives;
 
 public class Result
 {
@@ -62,7 +62,6 @@ public class Result<TValue> : Result
     private readonly TValue? _value;
 
     [JsonConstructor]
-    [System.Text.Json.Serialization.JsonConstructor]
     public Result(TValue? value, bool isSuccess, Error error)
         : base(isSuccess, error)
     {

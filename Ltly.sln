@@ -5,6 +5,10 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ltly.Lambda", "Ltly.Lambda\Ltly.Lambda.csproj", "{2E6FD861-D7E0-4DB1-8880-084535CD080C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ltly.CLI", "Ltly.CLI\Ltly.CLI.csproj", "{84D2B552-C1D3-454F-97F7-F7DD9FAA9104}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Kernel", "Shared.Kernel\Shared.Kernel.csproj", "{BDDAC78F-080A-4E8C-9C88-431BA2EF4ECD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{2E6FD861-D7E0-4DB1-8880-084535CD080C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E6FD861-D7E0-4DB1-8880-084535CD080C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E6FD861-D7E0-4DB1-8880-084535CD080C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84D2B552-C1D3-454F-97F7-F7DD9FAA9104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84D2B552-C1D3-454F-97F7-F7DD9FAA9104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84D2B552-C1D3-454F-97F7-F7DD9FAA9104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84D2B552-C1D3-454F-97F7-F7DD9FAA9104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDDAC78F-080A-4E8C-9C88-431BA2EF4ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDAC78F-080A-4E8C-9C88-431BA2EF4ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDDAC78F-080A-4E8C-9C88-431BA2EF4ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDDAC78F-080A-4E8C-9C88-431BA2EF4ECD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

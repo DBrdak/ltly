@@ -1,4 +1,4 @@
-﻿using Ltly.Lambda.Domain.Primitives;
+﻿using Shared.Kernel.Primitives;
 
 namespace Ltly.Lambda.Data;
 

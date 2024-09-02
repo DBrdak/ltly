@@ -8,7 +8,6 @@ $preTemplate = ".\pre-template.yaml"
 $awsProfile = "dbrdak-lambda"
 $region = "eu-central-1"
 
-Write-Host "Deploying Pre service..."
 aws cloudformation deploy `
     --template-file $preTemplate `
     --stack-name $preStackName `
@@ -28,14 +27,12 @@ if (-not $s3bucket) {
     exit 1
 }
 
-Write-Host "Packaging Messanger service..."
 sam build --template $ltlyTemplate
 sam package --s3-bucket $s3bucket --output-template-file $ltlyPackagedTemplate
 
-Write-Host "Deploying Messanger service..."
 sam deploy --template-file $ltlyPackagedTemplate `
     --stack-name $ltlyStackName `
-    --capabilities CAPABILITY_IAM `
+    --capabilities CAPABILITY_NAMED_IAM `
     --region $region `
     --profile $awsProfile
 

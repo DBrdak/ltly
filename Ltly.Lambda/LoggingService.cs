@@ -1,21 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Amazon.Lambda.Core;
+﻿using Amazon.Lambda.Core;
 
 namespace Ltly.Lambda;
 
 public sealed class LoggingService
 {
-    public ILambdaLogger? Logger { get; private set; }
-
-    private LoggingService()
-    {
-        Logger = null;
-    }
+    private ILambdaLogger? _logger;
 
     public void InitializeLogger(ILambdaLogger logger)
     {
-        Logger = logger;
+        _logger = logger;
     }
 
-    public void Log(string message) => Logger?.Log(message);
+    public void Log(string message) => _logger?.Log(message);
 }

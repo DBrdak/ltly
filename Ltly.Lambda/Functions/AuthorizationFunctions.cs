@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Ltly.Lambda.Functions;
 
-namespace Ltly.Lambda.Functions
+internal class AuthorizationFunctions
 {
-    internal class AuthorizationFunctions
-    {
-    }
 }

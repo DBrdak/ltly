@@ -1,4 +1,4 @@
-﻿namespace Ltly.Lambda.Domain.Primitives;
+﻿namespace Shared.Kernel.Primitives;
 
 public record Error(string Message)
 {

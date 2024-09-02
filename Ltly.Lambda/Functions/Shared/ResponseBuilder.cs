@@ -1,7 +1,7 @@
 ﻿using Amazon.Lambda.APIGatewayEvents;
-using Ltly.Lambda.Domain.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Shared.Kernel.Primitives;
 
 namespace Ltly.Lambda.Functions.Shared;
 
@@ -38,6 +38,20 @@ public static class ResponseBuilder
             Body = JsonConvert.SerializeObject(result, serializerSettings)
         };
 
+    private static APIGatewayHttpApiV2ProxyResponse Redirect(Result<string> result) =>
+        new()
+        {
+            StatusCode = 302,
+            Headers = new Dictionary<string, string>
+            {
+                {
+                    "Location", result.IsSuccess ?
+                        result.Value :
+                        string.Empty
+                }
+            }
+        };
+
     public static APIGatewayHttpApiV2ProxyResponse ReturnAPIResponse(
         this Result result,
         int? successStatusCode = null,
@@ -59,4 +73,8 @@ public static class ResponseBuilder
             Respond(result, successStatusCode ?? 200, headers) :
             Respond(result, failureStatusCode ?? 400, headers);
     }
+
+    public static APIGatewayHttpApiV2ProxyResponse ReturnAPIRedirectResponse(
+        this Result<string> result) =>
+        Redirect(result);
 }
