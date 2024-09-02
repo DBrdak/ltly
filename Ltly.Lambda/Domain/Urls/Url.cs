@@ -8,6 +8,7 @@ public sealed class Url
 {
     public string OriginalValue { get; init; }
     public string ShortenedValue { get; init; }
+    private const int tokenLength = 4;
 
     [JsonConstructor]
     [Newtonsoft.Json.JsonConstructor]
@@ -35,19 +36,19 @@ public sealed class Url
     {
         var ulid = Ulid.NewUlid().ToString();
 
-        return ulid.Substring(ulid.Length - 4, 4).ToLower();
+        return ulid.Substring(ulid.Length - 4, tokenLength).ToLower();
     }
 
     public static Result<string> GetShortenedUrlFromToken(string token)
     {
-        var isTokenValid = Ulid.TryParse(token.ToUpper(), out var ulid);
+        var isTokenValid = token.Length == tokenLength;
 
         if (!isTokenValid)
         {
             return UrlErrors.InvalidTokenError;
         }
 
-        token = ulid.ToString().ToLower();
+        token = token.ToLower();
 
         return $"{GlobalSettings.Domain}/{token}";
     }

@@ -69,6 +69,7 @@ public sealed class UrlShortenerFunctions
 
         if (shortenedUrlGetResult.IsFailure)
         {
+            _loggingService.Log($"Client provided invalid token: {token}");
             return shortenedUrlGetResult.ReturnAPIRedirectResponse();
         }
 

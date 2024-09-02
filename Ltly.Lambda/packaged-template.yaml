@@ -54,7 +54,7 @@ Resources:
     Properties:
       FunctionName: ShortenUrl
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/5b97ee0ae77c7d7adc575fcba16ccff0
+      CodeUri: s3://ltly-default/1e2688e82e391860ef4fab945e5068a8
       MemorySize: 3008
       EphemeralStorage:
         Size: 3008
@@ -83,7 +83,7 @@ Resources:
     Properties:
       FunctionName: Redirect
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/5b97ee0ae77c7d7adc575fcba16ccff0
+      CodeUri: s3://ltly-default/1e2688e82e391860ef4fab945e5068a8
       MemorySize: 3008
       EphemeralStorage:
         Size: 3008
