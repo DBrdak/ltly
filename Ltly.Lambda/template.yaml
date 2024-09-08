@@ -1,6 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: This template is partially managed by Amazon.Lambda.Annotations (v1.3.0.0).
+
+Parameters:
+  ACMCertificateArn:
+    Type: String
+    Description: ARN of the ACM certificate for ltly.me
+
 Resources:
   LtlyApi:
     Type: AWS::Serverless::HttpApi
@@ -21,6 +27,22 @@ Resources:
         AllowCredentials: true
       DefaultRouteSettings:
         DetailedMetricsEnabled: true
+  
+  LtlyDomain:
+    Type: AWS::ApiGatewayV2::DomainName
+    Properties:
+      DomainName: ltly.link
+      DomainNameConfigurations:
+        - CertificateArn: !Ref ACMCertificateArn
+          EndpointType: REGIONAL
+
+  LtlyApiMapping:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    Properties:
+      ApiId: !Ref LtlyApi
+      DomainName: !Ref LtlyDomain
+      Stage: '$default'
+
   LtlyDefaultLambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -40,6 +62,7 @@ Resources:
         - arn:aws:iam::aws:policy/CloudWatchFullAccessV2
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
         - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+
   ShortenUrl:
     Type: AWS::Serverless::Function
     Metadata:
@@ -64,6 +87,7 @@ Resources:
             Path: /api/v1/shorten
             Method: POST
             ApiId: !Ref LtlyApi
+
   Redirect:
     Type: AWS::Serverless::Function
     Metadata:
@@ -88,8 +112,8 @@ Resources:
             Path: /{token}
             Method: GET
             ApiId: !Ref LtlyApi
+
 Outputs:
   ApiURL:
     Description: API endpoint URL for Prod environment
-    Value:
-      Fn::Sub: https://${LtlyApi}.execute-api.${AWS::Region}.amazonaws.com/
+    Value: !Sub "https://${LtlyDomain}"
