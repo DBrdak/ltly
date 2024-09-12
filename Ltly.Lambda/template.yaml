@@ -1,12 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: This template is partially managed by Amazon.Lambda.Annotations (v1.3.0.0).
-
 Parameters:
   ACMCertificateArn:
     Type: String
     Description: ARN of the ACM certificate for ltly.me
-
 Resources:
   LtlyApi:
     Type: AWS::Serverless::HttpApi
@@ -27,7 +25,6 @@ Resources:
         AllowCredentials: true
       DefaultRouteSettings:
         DetailedMetricsEnabled: true
-  
   LtlyDomain:
     Type: AWS::ApiGatewayV2::DomainName
     Properties:
@@ -35,14 +32,12 @@ Resources:
       DomainNameConfigurations:
         - CertificateArn: !Ref ACMCertificateArn
           EndpointType: REGIONAL
-
   LtlyApiMapping:
     Type: AWS::ApiGatewayV2::ApiMapping
     Properties:
       ApiId: !Ref LtlyApi
       DomainName: !Ref LtlyDomain
       Stage: '$default'
-
   LtlyDefaultLambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -62,7 +57,6 @@ Resources:
         - arn:aws:iam::aws:policy/CloudWatchFullAccessV2
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
         - arn:aws:iam::aws:policy/AWSLambda_FullAccess
-
   ShortenUrl:
     Type: AWS::Serverless::Function
     Metadata:
@@ -87,7 +81,6 @@ Resources:
             Path: /api/v1/shorten
             Method: POST
             ApiId: !Ref LtlyApi
-
   Redirect:
     Type: AWS::Serverless::Function
     Metadata:
@@ -112,7 +105,28 @@ Resources:
             Path: /{token}
             Method: GET
             ApiId: !Ref LtlyApi
-
+  RemoveOldUrls:
+    Type: AWS::Serverless::Function
+    Metadata:
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      FunctionName: RemoveOldUrls
+      Runtime: dotnet8
+      CodeUri: .
+      MemorySize: 3008
+      EphemeralStorage:
+        Size: 3008
+      Timeout: 30
+      Role: !GetAtt LtlyDefaultLambdaRole.Arn
+      PackageType: Zip
+      Handler: Ltly.Lambda::Ltly.Lambda.Functions.UrlShortenerFunctions_RemoveOldUrls_Generated::RemoveOldUrls
+      Events:
+        Type: Schedule
+        Properties:
+          Name: DailyOldUrlRemoval
+          Description: Removes old URLs from the database daily
+          Schedule: 'rate(1 day)'
+          Enabled: true
 Outputs:
   ApiURL:
     Description: API endpoint URL for Prod environment

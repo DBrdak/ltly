@@ -7,7 +7,8 @@ namespace Ltly.Lambda.Domain.Urls;
 public sealed class Url
 {
     public string OriginalValue { get; init; }
-    public string ShortenedValue { get; init; }
+    public string ShortenedValue { get; private set; }
+    public long ExpireOnTicks { get; init; } = DateTime.UtcNow.AddMonths(6).Ticks;
     private const int tokenLength = 4;
     private const string httpsPrefix = "https://";
     private const string httpPrefix = "http://";
@@ -43,7 +44,19 @@ public sealed class Url
     {
         var ulid = Ulid.NewUlid().ToString();
 
-        return ulid.Substring(ulid.Length - 4, tokenLength).ToLower();
+        var initToken = ulid.Substring(ulid.Length - 4, tokenLength);
+
+        var token = string.Empty;
+
+        for (var i = 0; i < initToken.Length; i++)
+        {
+            var rng = new Random().Next(tokenLength);
+            token += rng == i ? 
+                initToken[i].ToString().ToLower() :
+                initToken[i].ToString().ToUpper();
+        }
+
+        return token;
     }
 
     public static Result<string> GetShortenedUrlFromToken(string token)
@@ -55,8 +68,11 @@ public sealed class Url
             return UrlErrors.InvalidTokenError;
         }
 
-        token = token.ToLower();
-
         return $"{GlobalSettings.Domain}/{token}";
+    }
+
+    public void ReGenerateToken()
+    {
+        ShortenedValue = GenerateToken();
     }
 }

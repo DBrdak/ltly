@@ -12,4 +12,5 @@ public sealed class LoggingService
     }
 
     public void Log(string message) => _logger?.Log(message);
+    public void LogError(string message) => _logger?.LogError(message);
 }

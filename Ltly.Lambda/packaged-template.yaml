@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: This template is partially managed by Amazon.Lambda.Annotations (v1.3.0.0).
+Parameters:
+  ACMCertificateArn:
+    Type: String
+    Description: ARN of the ACM certificate for ltly.me
 Resources:
   LtlyApi:
     Type: AWS::Serverless::HttpApi
@@ -23,6 +27,26 @@ Resources:
         DetailedMetricsEnabled: true
     Metadata:
       SamResourceId: LtlyApi
+  LtlyDomain:
+    Type: AWS::ApiGatewayV2::DomainName
+    Properties:
+      DomainName: ltly.link
+      DomainNameConfigurations:
+      - CertificateArn:
+          Ref: ACMCertificateArn
+        EndpointType: REGIONAL
+    Metadata:
+      SamResourceId: LtlyDomain
+  LtlyApiMapping:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    Properties:
+      ApiId:
+        Ref: LtlyApi
+      DomainName:
+        Ref: LtlyDomain
+      Stage: $default
+    Metadata:
+      SamResourceId: LtlyApiMapping
   LtlyDefaultLambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -54,7 +78,7 @@ Resources:
     Properties:
       FunctionName: ShortenUrl
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/3efd316ff9208d54f453b19e67a176cb
+      CodeUri: s3://ltly-default/c8d04bdcfb8b7447f07f3623d1b99dd1
       MemorySize: 3008
       EphemeralStorage:
         Size: 3008
@@ -83,7 +107,7 @@ Resources:
     Properties:
       FunctionName: Redirect
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/3efd316ff9208d54f453b19e67a176cb
+      CodeUri: s3://ltly-default/c8d04bdcfb8b7447f07f3623d1b99dd1
       MemorySize: 3008
       EphemeralStorage:
         Size: 3008
@@ -106,4 +130,4 @@ Outputs:
   ApiURL:
     Description: API endpoint URL for Prod environment
     Value:
-      Fn::Sub: https://${LtlyApi}.execute-api.${AWS::Region}.amazonaws.com/
+      Fn::Sub: https://${LtlyDomain}

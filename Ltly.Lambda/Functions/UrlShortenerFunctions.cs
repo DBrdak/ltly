@@ -2,8 +2,11 @@
 using Amazon.Lambda.Annotations.APIGateway;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using Amazon.Runtime.Internal;
 using Ltly.Lambda.Domain.Urls;
 using Ltly.Lambda.Functions.Shared;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Shared.Kernel.Primitives;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -90,5 +93,22 @@ public sealed class UrlShortenerFunctions
         }
 
         return originalUrlGetResult.ReturnAPIRedirectResponse();
+    }
+
+    [LambdaFunction(ResourceName = nameof(RemoveOldUrls))]
+    public async Task RemoveOldUrls(ILambdaContext lambdaContext)
+    {
+        _loggingService.InitializeLogger(lambdaContext.Logger);
+
+        _loggingService.Log("Starting old URLs removal");
+
+        try
+        {
+            await _urlRepository.RemoveOldUrls();
+        }
+        catch (Exception e)
+        {
+            _loggingService.LogError($"Failed to remove old URLs:\n{JsonConvert.SerializeObject(e)}");
+        }
     }
 }
