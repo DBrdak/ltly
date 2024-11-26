@@ -8,8 +8,6 @@ $preTemplate = ".\pre-template.yaml"
 $awsProfile = "dbrdak-lambda"
 $region = "eu-central-1"
 
-$acmCertArn = aws acm list-certificates --query "CertificateSummaryList[?DomainName=='ltly.link'].CertificateArn" --output text
-
 aws cloudformation deploy `
     --template-file $preTemplate `
     --stack-name $preStackName `
@@ -35,7 +33,6 @@ sam package --s3-bucket $s3bucket --output-template-file $ltlyPackagedTemplate
 sam deploy --template-file $ltlyPackagedTemplate `
     --stack-name $ltlyStackName `
     --capabilities CAPABILITY_NAMED_IAM `
-    --parameter-overrides "ACMCertificateArn=$acmCertArn" `
     --region $region `
     --profile $awsProfile
     

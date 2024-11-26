@@ -1,0 +1,53 @@
+<!-- popup.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ltly URL Shortener</title>
+  <style>
+    body { 
+      height: 100%;
+      font-family: Arial, sans-serif;
+      margin: 10px;
+      min-width: 300px;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column; 
+      gap: 1em;
+      text-align: center;
+    }
+    #result { margin-top: 10px; word-break: break-all; }
+    #shorten-btn { margin-top: 10px; }
+    input, button { 
+      width: 90%; 
+      padding: 8px;
+      border-radius: 20px;
+      border: 1px #333;
+      box-shadow: 2px 0 6px 1px #999;
+    }
+    input:focus {
+      box-shadow: 2px 0 6px 1px #777;
+      border: none;
+    }
+    button {
+      background-color: #fff333;
+      opacity: 0.8;
+    }
+    button:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+    button:active {
+      scale: 0.9;
+      scale: 0.95;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" id="url-input" placeholder="Enter URL or leave blank to use current page">
+  <button id="shorten-btn">Shorten URL</button>
+  <div id="result"></div>
+  <script src="popup.js"></script>
+</body>
+</html>

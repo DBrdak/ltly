@@ -1,10 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: This template is partially managed by Amazon.Lambda.Annotations (v1.3.0.0).
-Parameters:
-  ACMCertificateArn:
-    Type: String
-    Description: ARN of the ACM certificate for ltly.me
 Resources:
   LtlyApi:
     Type: AWS::Serverless::HttpApi
@@ -27,26 +23,6 @@ Resources:
         DetailedMetricsEnabled: true
     Metadata:
       SamResourceId: LtlyApi
-  LtlyDomain:
-    Type: AWS::ApiGatewayV2::DomainName
-    Properties:
-      DomainName: ltly.link
-      DomainNameConfigurations:
-      - CertificateArn:
-          Ref: ACMCertificateArn
-        EndpointType: REGIONAL
-    Metadata:
-      SamResourceId: LtlyDomain
-  LtlyApiMapping:
-    Type: AWS::ApiGatewayV2::ApiMapping
-    Properties:
-      ApiId:
-        Ref: LtlyApi
-      DomainName:
-        Ref: LtlyDomain
-      Stage: $default
-    Metadata:
-      SamResourceId: LtlyApiMapping
   LtlyDefaultLambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -76,12 +52,9 @@ Resources:
       - RootPost
       Tool: Amazon.Lambda.Annotations
     Properties:
-      FunctionName: ShortenUrl
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/c8d04bdcfb8b7447f07f3623d1b99dd1
+      CodeUri: s3://ltly-default/278d49020b5b2cd23d6678dba3759043
       MemorySize: 3008
-      EphemeralStorage:
-        Size: 3008
       Timeout: 30
       Role:
         Fn::GetAtt:
@@ -93,10 +66,8 @@ Resources:
         RootPost:
           Type: HttpApi
           Properties:
-            Path: /api/v1/shorten
+            Path: /s
             Method: POST
-            ApiId:
-              Ref: LtlyApi
   Redirect:
     Type: AWS::Serverless::Function
     Metadata:
@@ -105,12 +76,9 @@ Resources:
       - RootGet
       Tool: Amazon.Lambda.Annotations
     Properties:
-      FunctionName: Redirect
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/c8d04bdcfb8b7447f07f3623d1b99dd1
+      CodeUri: s3://ltly-default/278d49020b5b2cd23d6678dba3759043
       MemorySize: 3008
-      EphemeralStorage:
-        Size: 3008
       Timeout: 30
       Role:
         Fn::GetAtt:
@@ -122,12 +90,27 @@ Resources:
         RootGet:
           Type: HttpApi
           Properties:
-            Path: /{token}
+            Path: /s/{token}
             Method: GET
-            ApiId:
-              Ref: LtlyApi
-Outputs:
-  ApiURL:
-    Description: API endpoint URL for Prod environment
-    Value:
-      Fn::Sub: https://${LtlyDomain}
+  RemoveOldUrls:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: RemoveOldUrls
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet8
+      CodeUri: s3://ltly-default/278d49020b5b2cd23d6678dba3759043
+      MemorySize: 3008
+      Timeout: 30
+      Role:
+        Fn::GetAtt:
+        - LtlyDefaultLambdaRole
+        - Arn
+      PackageType: Zip
+      Handler: Ltly.Lambda::Ltly.Lambda.Functions.UrlShortenerFunctions_RemoveOldUrls_Generated::RemoveOldUrls
+      Events:
+        RemoveOldUrlsEvent:
+          Type: Schedule
+          Properties:
+            Name: RemoveOldUrls
+            Schedule: rate(1 day)

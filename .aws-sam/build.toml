@@ -27,4 +27,16 @@ functions = ["Redirect"]
 Tool = "Amazon.Lambda.Annotations"
 SyncedEvents = ["RootGet"]
 
+[function_build_definitions.968be929-6e32-4315-b507-b5a54a9286f7]
+codeuri = "D:\\Programownie\\Projekty\\Ltly\\Ltly.Lambda"
+runtime = "dotnet8"
+architecture = "x86_64"
+handler = "Ltly.Lambda::Ltly.Lambda.Functions.UrlShortenerFunctions_RemoveOldUrls_Generated::RemoveOldUrls"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["RemoveOldUrls"]
+
+[function_build_definitions.968be929-6e32-4315-b507-b5a54a9286f7.metadata]
+Tool = "Amazon.Lambda.Annotations"
+
 [layer_build_definitions]

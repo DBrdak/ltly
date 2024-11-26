@@ -30,7 +30,7 @@ public sealed class UrlShortenerFunctions
     }
 
     [LambdaFunction(ResourceName = nameof(ShortenUrl))]
-    [HttpApi(LambdaHttpMethod.Post, "/api/v1/shorten")]
+    [HttpApi(LambdaHttpMethod.Post, "/s")]
     public async Task<APIGatewayHttpApiV2ProxyResponse> ShortenUrl(
         [FromQuery]string url,
         APIGatewayHttpApiV2ProxyRequest requestContext,
@@ -59,7 +59,7 @@ public sealed class UrlShortenerFunctions
     }
 
     [LambdaFunction(ResourceName = nameof(Redirect))]
-    [HttpApi(LambdaHttpMethod.Get, "/{token}")]
+    [HttpApi(LambdaHttpMethod.Get, "/s/{token}")]
     public async Task<APIGatewayHttpApiV2ProxyResponse> Redirect(
         string token,
         APIGatewayHttpApiV2ProxyRequest requestContext,
