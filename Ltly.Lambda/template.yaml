@@ -7,7 +7,8 @@ Resources:
     Properties:
       CorsConfiguration:
         AllowOrigins:
-          - "http://localhost:5173"
+          - "https://localhost:5173"
+          - "https://ltly.dbrdak.com"
         AllowHeaders:
           - authorization
           - content-type
