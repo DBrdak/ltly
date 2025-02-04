@@ -81,10 +81,10 @@ internal sealed class UrlRepository : Repository<Url>, IUrlRepository
         return JsonConvert.DeserializeObject<Url>(docJson)?.OriginalValue;
     }
 
-    public async Task<Result> RemoveOldUrls(CancellationToken cancellationToken = default)
+    public async Task<Result<int>> RemoveOldUrls(CancellationToken cancellationToken = default)
     {
         var filter = new ScanFilter();
-        filter.AddCondition(nameof(Url.ExpireOnTicks), ScanOperator.GreaterThanOrEqual, DateTime.UtcNow.Ticks);
+        filter.AddCondition(nameof(Url.ExpireOnTicks), ScanOperator.LessThan, DateTime.UtcNow.Ticks);
 
         var scanConfig = new ScanOperationConfig
         {
@@ -112,6 +112,6 @@ internal sealed class UrlRepository : Repository<Url>, IUrlRepository
 
         await batch.ExecuteAsync(cancellationToken);
 
-        return Result.Success();
+        return Result.Success(oldUrls?.Count ?? 0);
     }
 }

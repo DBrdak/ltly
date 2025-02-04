@@ -8,5 +8,5 @@ public interface IUrlRepository
 
     Task<Result<string>> GetOriginalUrlAsync(string shoretenedUrl, CancellationToken cancellationToken = default);
 
-    Task<Result> RemoveOldUrls(CancellationToken cancellationToken = default);
+    Task<Result<int>> RemoveOldUrls(CancellationToken cancellationToken = default);
 }

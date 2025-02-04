@@ -104,7 +104,17 @@ public sealed class UrlShortenerFunctions
 
         try
         {
-            await _urlRepository.RemoveOldUrls();
+            var result = await _urlRepository.RemoveOldUrls();
+
+            switch (result)
+            {
+                case { IsFailure: true }:
+                    _loggingService.Log("Failed to remove old URLs");
+                    return;
+                case { IsSuccess: true }:
+                    _loggingService.Log($"Successfully removed {result.Value} old URLs");
+                    return;
+            }
         }
         catch (Exception e)
         {
