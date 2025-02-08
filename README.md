@@ -15,7 +15,6 @@ ltly is a cloud-native URL shortener designed for simplicity and ease-of-use. It
 - [Configuration](#configuration)
 - [Contributing](#contributing)
 - [License](#license)
-- [Acknowledgments](#acknowledgments)
 
 ---
 
@@ -119,13 +118,3 @@ Contributions are welcome! If you would like to enhance or modify any part of lt
 ## License
 
 This project is open for public use. *(Feel free to add any additional licensing details if necessary.)*
-
----
-
-## Acknowledgments
-
-- **AWS Services:**  
-  For providing robust cloud infrastructure that powers this app.
-
-- **The Open Source Community:**  
-  For the numerous tools, libraries, and frameworks that made this project possible.
