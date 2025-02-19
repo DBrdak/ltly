@@ -7,7 +7,8 @@ Resources:
     Properties:
       CorsConfiguration:
         AllowOrigins:
-        - http://localhost:5173
+        - https://localhost:5173
+        - https://ltly.dbrdak.com
         AllowHeaders:
         - authorization
         - content-type
@@ -52,8 +53,9 @@ Resources:
       - RootPost
       Tool: Amazon.Lambda.Annotations
     Properties:
+      FunctionName: ShortenUrl
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/278d49020b5b2cd23d6678dba3759043
+      CodeUri: s3://ltly-default/e7ac6d223645502a50c3c5cb69b10703
       MemorySize: 3008
       Timeout: 30
       Role:
@@ -68,6 +70,8 @@ Resources:
           Properties:
             Path: /s
             Method: POST
+            ApiId:
+              Ref: LtlyApi
   Redirect:
     Type: AWS::Serverless::Function
     Metadata:
@@ -76,8 +80,9 @@ Resources:
       - RootGet
       Tool: Amazon.Lambda.Annotations
     Properties:
+      FunctionName: Redirect
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/278d49020b5b2cd23d6678dba3759043
+      CodeUri: s3://ltly-default/e7ac6d223645502a50c3c5cb69b10703
       MemorySize: 3008
       Timeout: 30
       Role:
@@ -92,14 +97,17 @@ Resources:
           Properties:
             Path: /s/{token}
             Method: GET
+            ApiId:
+              Ref: LtlyApi
   RemoveOldUrls:
     Type: AWS::Serverless::Function
     Metadata:
       SamResourceId: RemoveOldUrls
       Tool: Amazon.Lambda.Annotations
     Properties:
+      FunctionName: RemoveOldUrls
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/278d49020b5b2cd23d6678dba3759043
+      CodeUri: s3://ltly-default/e7ac6d223645502a50c3c5cb69b10703
       MemorySize: 3008
       Timeout: 30
       Role:
@@ -114,3 +122,5 @@ Resources:
           Properties:
             Name: RemoveOldUrls
             Schedule: rate(1 day)
+            ApiId:
+              Ref: LtlyApi

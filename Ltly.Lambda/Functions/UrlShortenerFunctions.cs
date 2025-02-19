@@ -45,6 +45,9 @@ public sealed class UrlShortenerFunctions
 
         if (urlGenerateResult.IsFailure)
         {
+            _loggingService.Log(
+                $"Failed to shorten the URL from: {url} error: {urlGenerateResult.Error.Message}");
+
             return urlGenerateResult.ReturnAPIResponse();
         }
 
