@@ -5,6 +5,7 @@ Resources:
   LtlyApi:
     Type: AWS::Serverless::HttpApi
     Properties:
+      Name: ltly
       CorsConfiguration:
         AllowOrigins:
           - "https://localhost:5173"
@@ -104,4 +105,3 @@ Resources:
           Properties:
             Name: RemoveOldUrls
             Schedule: rate(1 day)
-            ApiId: !Ref LtlyApi
