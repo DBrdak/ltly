@@ -56,7 +56,7 @@ Resources:
     Properties:
       FunctionName: ShortenUrl
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/9ae8ff15eb1dfbe4e94c4e0412c1b669
+      CodeUri: s3://ltly-default/3523b366f1b34008055e8340e1e1b1e0
       MemorySize: 3008
       Timeout: 30
       Role:
@@ -83,7 +83,7 @@ Resources:
     Properties:
       FunctionName: Redirect
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/9ae8ff15eb1dfbe4e94c4e0412c1b669
+      CodeUri: s3://ltly-default/3523b366f1b34008055e8340e1e1b1e0
       MemorySize: 3008
       Timeout: 30
       Role:
@@ -108,7 +108,7 @@ Resources:
     Properties:
       FunctionName: RemoveOldUrls
       Runtime: dotnet8
-      CodeUri: s3://ltly-default/9ae8ff15eb1dfbe4e94c4e0412c1b669
+      CodeUri: s3://ltly-default/3523b366f1b34008055e8340e1e1b1e0
       MemorySize: 3008
       Timeout: 30
       Role:

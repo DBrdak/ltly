@@ -26,7 +26,7 @@ function App() {
 
   const shortenUrl = async (e) => {
     e.preventDefault();
-    fetch(`https://dbrdak.com/s?url=${url}`, { method: 'POST' })
+    fetch(`https://api.dbrdak.com/s?url=${url}`, { method: 'POST' })
       .then(response => response.json())
       .then(data => {
         if (data.value) {

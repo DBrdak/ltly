@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    const apiUrl = `https://dbrdak.com/s?url=${encodeURIComponent(url)}`;
+    const apiUrl = `https://api.dbrdak.com/s?url=${encodeURIComponent(url)}`;
 
     fetch(apiUrl, { method: 'POST' })
       .then(response => response.json())
